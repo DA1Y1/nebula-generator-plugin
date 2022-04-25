@@ -344,7 +344,7 @@ public class SettingUI extends JDialog {
             Messages.showMessageDialog("nebula url is null", "Error", null);
             return;
         }
-        if (!urlField.getText().startsWith("jdbc:graph://")) {
+        if (!urlField.getText().startsWith("jdbc:nebula://")) {
             Messages.showMessageDialog("Connect Example" + DbType.NEBULA.getConnectionUrlPattern(), "Error", null);
             return;
         }

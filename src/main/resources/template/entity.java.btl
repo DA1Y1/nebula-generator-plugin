@@ -1,0 +1,58 @@
+package ${package.Entity};
+<% for(pkg in table.importPackages){ %>
+import ${pkg};
+<% } %>
+
+<% if(entityLombokModel){ %>
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+<% if(chainModel){ %>
+import lombok.experimental.Accessors;
+<% } %>
+<% } %>
+
+/**
+ * <p>
+ * ${table.comment!}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+@Data
+@Accessors(chain = true)
+public class ${entity} implements Serializable {
+
+<% if(entitySerialVersionUID){ %>
+    private static final long serialVersionUID = 1L;
+<% } %>
+
+<% /** ----------点id---------- **/ %>
+<% if(table.isTag){ %>
+    /**
+     * vid
+     */
+    private ${table.idType} id;
+<% } %>
+
+<% /** ----------边id---------- **/ %>
+<% if(table.isEdge){ %>
+    /**
+     * 起始点
+     */
+    private ${table.idType} src;
+
+    /**
+     * 终止点
+     */
+    private ${table.idType} dst;
+<% } %>
+
+<% /** -----------BEGIN 字段循环遍历----------- **/ %>
+<% for(field in table.fields){ %>
+    private ${field.propertyType} ${field.propertyName};
+
+<% } %>
+<% /** -----------END 字段循环遍历----------- **/ %>
+}
