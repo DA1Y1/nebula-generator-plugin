@@ -86,9 +86,9 @@ public class CodeGenerator {
         gc.setFileOverride(true);
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
-        gc.setEntityName("%s" + generatorConfig.getModelPostfix());
-        gc.setMapperName("%s" + generatorConfig.getDaoPostfix());
-        gc.setXmlName("%s" + generatorConfig.getMapperPostfix());
+        gc.setEntityName("%s" + generatorConfig.getModelSuffix());
+        gc.setMapperName("%s" + generatorConfig.getDaoSuffix());
+        gc.setXmlName("%s" + generatorConfig.getMapperSuffix());
         mpg.setGlobalConfig(gc);
 
         // 自定义配置

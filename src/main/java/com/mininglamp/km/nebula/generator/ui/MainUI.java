@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.mininglamp.km.nebula.generator.tools.Constants.*;
+
 /**
  * @author daiyi
  * @date 2021/9/17
@@ -45,7 +47,7 @@ public class MainUI extends JFrame {
     private Config config;
 
 
-    private JPanel contentPane = new JBPanel<>();
+    private JPanel contentPanel = new JBPanel<>();
     private JButton buttonOK = new JButton("OK");
     private JButton buttonCancel = new JButton("CANCEL");
     private JButton selectConfigBtn = new JButton("SELECT");
@@ -56,11 +58,9 @@ public class MainUI extends JFrame {
     private JBTextField modelPackageField = new JBTextField(12);
     private JBTextField daoPackageField = new JBTextField(12);
     private JBTextField xmlPackageField = new JBTextField(12);
-    private JTextField modelPostfixField = new JTextField(10);
-    private JTextField daoPostfixField = new JTextField(10);
-    private JTextField mapperPostfixField = new JTextField(10);
-    private JTextField modelNameField = new JTextField(10);
-    private JTextField keyField = new JTextField(10);
+    private JTextField modelSuffixField = new JTextField(8);
+    private JTextField daoSuffixField = new JTextField(8);
+    private JTextField mapperSuffixField = new JTextField(8);
 
     private TextFieldWithBrowseButton projectFolderBtn = new TextFieldWithBrowseButton();
     private TextFieldWithBrowseButton modelFolderBtn = new TextFieldWithBrowseButton();
@@ -69,7 +69,7 @@ public class MainUI extends JFrame {
     private JTextField modelMvnField = new JBTextField(15);
     private JTextField daoMvnField = new JBTextField(15);
     private JTextField xmlMvnField = new JBTextField(15);
-    private JButton setProjectBtn = new JButton("Set-Project-Path");
+    private JButton setProjectBtn = new JButton(SET_PROJECT_PATH);
 
 
     public MainUI(AnActionEvent anActionEvent) throws HeadlessException {
@@ -81,8 +81,8 @@ public class MainUI extends JFrame {
         historyConfigList = persistentConfig.getHistoryConfigList();
 
 
-        setTitle("nebula generate tool");
-        setPreferredSize(new Dimension(1300, 700));//设置大小
+        setTitle("Nebula Generator Tool");
+        setPreferredSize(new Dimension(1000, 600));//设置大小
         setLocation(120, 100);
         pack();
         setVisible(true);
@@ -98,72 +98,73 @@ public class MainUI extends JFrame {
         }
 
 
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(new BorderLayout());
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPanel.setLayout(new BorderLayout());
 
-        JPanel paneMain = new JPanel(new GridLayout(2, 1, 3, 3));//主要设置显示在这里
-        JPanel paneMainTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        paneMainTop.setBorder(new EmptyBorder(10, 30, 5, 40));
+        JPanel panelMain = new JPanel(new GridLayout(1, 1, 3, 3));//主要设置显示在这里
+        JPanel panelMainTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelMainTop.setBorder(new EmptyBorder(10, 30, 5, 40));
 
-        JPanel paneMainTop1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel paneMainTop2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel paneMainTop3 = new JPanel(new GridLayout(4, 1, 3, 3));
-        paneMainTop.add(paneMainTop1);
-        paneMainTop.add(paneMainTop2);
-        paneMainTop.add(paneMainTop3);
-
-
-        JPanel paneLeft1 = new JPanel();
-        paneLeft1.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JLabel tablejLabel = new JLabel("table  name:");
-        tablejLabel.setSize(new Dimension(20, 30));
-        paneLeft1.add(tablejLabel);
-        paneLeft1.add(tableNameField);
+        JPanel panelMainTop1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panelMainTop2 = new JPanel(new GridLayout(4, 1, 3, 3));
+        JPanel panelMainTop3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelMainTop.add(panelMainTop1);
+        panelMainTop.add(panelMainTop2);
+        panelMainTop.add(panelMainTop3);
 
 
-        JPanel paneRight1 = new JPanel();
-        paneRight1.setLayout(new FlowLayout(FlowLayout.CENTER));
-        paneRight1.add(new JLabel("model postfix:"));
-        if (config != null && !StringUtils.isEmpty(config.getModelPostfix())) {
-            modelPostfixField.setText(config.getModelPostfix());
+        JPanel panelLeft1 = new JPanel();
+        panelLeft1.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JLabel tableLabel = new JLabel(TABLE_NAME);
+        tableLabel.setSize(new Dimension(20, 30));
+        panelLeft1.add(tableLabel);
+        panelLeft1.add(tableNameField);
+        panelMainTop1.add(panelLeft1);
+
+
+
+        JPanel panelRight1 = new JPanel();
+        panelRight1.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelRight1.add(new JLabel(MODEL_SUFFIX));
+        if (config != null && !StringUtils.isEmpty(config.getModelSuffix())) {
+            modelSuffixField.setText(config.getModelSuffix());
         } else {
-            modelPostfixField.setText("DO");
+            modelSuffixField.setText(DO);
         }
-        paneRight1.add(modelPostfixField);
+        panelRight1.add(modelSuffixField);
 
-        JPanel paneRight2 = new JPanel();
-        paneRight2.setLayout(new FlowLayout(FlowLayout.CENTER));
-        paneRight2.add(new JLabel("dao postfix:"));
-        if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
-            daoPostfixField.setText(config.getDaoPostfix());
+        JPanel panelRight2 = new JPanel();
+        panelRight2.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelRight2.add(new JLabel(DAO_SUFFIX));
+        if (config != null && !StringUtils.isEmpty(config.getDaoSuffix())) {
+            daoSuffixField.setText(config.getDaoSuffix());
         } else {
-            daoPostfixField.setText("Dao");
+            daoSuffixField.setText(DAO);
         }
-        paneRight2.add(daoPostfixField);
+        panelRight2.add(daoSuffixField);
 
-        JPanel paneRight3 = new JPanel();
-        paneRight3.setLayout(new FlowLayout(FlowLayout.CENTER));
-        paneRight3.add(new JLabel("mapper postfix:"));
-        if (config != null && !StringUtils.isEmpty(config.getMapperPostfix())) {
-            mapperPostfixField.setText(config.getMapperPostfix());
+        JPanel panelRight3 = new JPanel();
+        panelRight3.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelRight3.add(new JLabel(MAPPER_SUFFIX));
+        if (config != null && !StringUtils.isEmpty(config.getMapperSuffix())) {
+            mapperSuffixField.setText(config.getMapperSuffix());
         } else {
-            mapperPostfixField.setText("Mapper");
+            mapperSuffixField.setText(MAPPER);
         }
-        paneRight3.add(mapperPostfixField);
+        panelRight3.add(mapperSuffixField);
 
-        paneMainTop1.add(paneLeft1);
-        paneMainTop1.add(paneRight1);
-        paneMainTop1.add(paneRight2);
-        paneMainTop1.add(paneRight3);
+        panelMainTop1.add(panelRight1);
+        panelMainTop1.add(panelRight2);
+        panelMainTop1.add(panelRight3);
 
         JPanel modelPackagePanel = new JPanel();
         modelPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JBLabel labelLeft4 = new JBLabel("java file package:");
+        JBLabel labelLeft4 = new JBLabel(JAVA_FILE_PACKAGE);
         modelPackagePanel.add(labelLeft4);
         if (config != null && !StringUtils.isEmpty(config.getModelPackage())) {
             modelPackageField.setText(config.getModelPackage());
         } else {
-            modelPackageField.setText("generator");
+            modelPackageField.setText(GENERATOR);
         }
         modelPackagePanel.add(modelPackageField);
         JButton packageBtn1 = new JButton("...");
@@ -172,57 +173,31 @@ public class MainUI extends JFrame {
             chooser.selectPackage(modelPackageField.getText());
             chooser.show();
             final PsiPackage psiPackage = chooser.getSelectedPackage();
-            String packageName = psiPackage == null ? "generator" : psiPackage.getQualifiedName();
+            String packageName = psiPackage == null ? GENERATOR : psiPackage.getQualifiedName();
             modelPackageField.setText(packageName);
             MainUI.this.toFront();
         });
         modelPackagePanel.add(packageBtn1);
 
 
-//        JPanel daoPackagePanel = new JPanel();
-//        daoPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-//        JLabel labelLeft5 = new JLabel("dao package:");
-//        daoPackagePanel.add(labelLeft5);
-//
-//
-//        if (config != null && !StringUtils.isEmpty(config.getDaoPackage())) {
-//            daoPackageField.setText(config.getDaoPackage());
-//        } else {
-//            daoPackageField.setText("generator");
-//        }
-//        daoPackagePanel.add(daoPackageField);
-//
-//        JButton packageBtn2 = new JButton("...");
-//        packageBtn2.addActionListener(actionEvent -> {
-//            final PackageChooserDialog chooser = new PackageChooserDialog("choose dao package", project);
-//            chooser.selectPackage(daoPackageField.getText());
-//            chooser.show();
-//            final PsiPackage psiPackage = chooser.getSelectedPackage();
-//            String packageName = psiPackage == null ? null : psiPackage.getQualifiedName();
-//            daoPackageField.setText(packageName);
-//            MainUI.this.toFront();
-//        });
-//        daoPackagePanel.add(packageBtn2);
-
         JPanel xmlPackagePanel = new JPanel();
         xmlPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel labelLeft6 = new JLabel("xml package:");
+        JLabel labelLeft6 = new JLabel(XML_PACKAGE);
         xmlPackagePanel.add(labelLeft6);
         if (config != null && !StringUtils.isEmpty(config.getXmlPackage())) {
             xmlPackageField.setText(config.getXmlPackage());
         } else {
-            xmlPackageField.setText("generator");
+            xmlPackageField.setText(GENERATOR);
         }
         xmlPackagePanel.add(xmlPackageField);
 
-        paneMainTop2.add(modelPackagePanel);
-//        paneMainTop2.add(daoPackagePanel);
-        paneMainTop2.add(xmlPackagePanel);
+        panelMainTop3.add(modelPackagePanel);
+        panelMainTop3.add(xmlPackagePanel);
 
 
         JPanel projectFolderPanel = new JPanel();
         projectFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel projectLabel = new JLabel("project folder:");
+        JLabel projectLabel = new JLabel(PROJECT_FOLDER);
         projectFolderPanel.add(projectLabel);
         projectFolderBtn.setTextFieldPreferredWidth(45);
         if (config != null && !StringUtils.isEmpty(config.getProjectFolder())) {
@@ -243,8 +218,7 @@ public class MainUI extends JFrame {
 
         JPanel modelFolderPanel = new JPanel();
         modelFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        modelFolderPanel.add(new JLabel("model  folder:"));
-
+        modelFolderPanel.add(new JLabel(MODEL_FOLDER));
         modelFolderBtn.setTextFieldPreferredWidth(45);
         if (config != null && !StringUtils.isEmpty(config.getModelTargetFolder())) {
             modelFolderBtn.setText(config.getModelTargetFolder());
@@ -259,14 +233,14 @@ public class MainUI extends JFrame {
             }
         });
         modelFolderPanel.add(modelFolderBtn);
-        modelFolderPanel.add(new JLabel("mvn path:"));
-        modelMvnField.setText("src/main/java");
+        modelFolderPanel.add(new JLabel(MVN_PATH));
+        modelMvnField.setText(SRC_MAIN_JAVA);
         modelFolderPanel.add(modelMvnField);
 
 
         JPanel daoFolderPanel = new JPanel();
         daoFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        daoFolderPanel.add(new JLabel("dao     folder:"));
+        daoFolderPanel.add(new JLabel(DAO_FOLDER));
         daoFolderBtn.setTextFieldPreferredWidth(45);
         if (config != null && !StringUtils.isEmpty(config.getDaoTargetFolder())) {
             daoFolderBtn.setText(config.getDaoTargetFolder());
@@ -281,15 +255,14 @@ public class MainUI extends JFrame {
             }
         });
         daoFolderPanel.add(daoFolderBtn);
-        daoFolderPanel.add(new JLabel("mvn path:"));
-        daoMvnField.setText("src/main/java");
+        daoFolderPanel.add(new JLabel(MVN_PATH));
+        daoMvnField.setText(SRC_MAIN_JAVA);
         daoFolderPanel.add(daoMvnField);
 
 
         JPanel xmlFolderPanel = new JPanel();
         xmlFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        xmlFolderPanel.add(new JLabel("xml     folder:"));
-
+        xmlFolderPanel.add(new JLabel(XML_FOLDER));
         xmlFolderBtn.setTextFieldPreferredWidth(45);
         if (config != null && !StringUtils.isEmpty(config.getXmlTargetFolder())) {
             xmlFolderBtn.setText(config.getXmlTargetFolder());
@@ -299,22 +272,22 @@ public class MainUI extends JFrame {
         xmlFolderBtn.addBrowseFolderListener(new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor()) {
         });
         xmlFolderPanel.add(xmlFolderBtn);
-        xmlFolderPanel.add(new JLabel("mvn path:"));
-        xmlMvnField.setText("src/main/resources");
+        xmlFolderPanel.add(new JLabel(MVN_PATH));
+        xmlMvnField.setText(SRC_MAIN_RESOURCES);
         xmlFolderPanel.add(xmlMvnField);
 
-        paneMainTop3.add(projectFolderPanel);
-        paneMainTop3.add(modelFolderPanel);
-        paneMainTop3.add(daoFolderPanel);
-        paneMainTop3.add(xmlFolderPanel);
+        panelMainTop2.add(projectFolderPanel);
+        panelMainTop2.add(modelFolderPanel);
+        panelMainTop2.add(daoFolderPanel);
+        panelMainTop2.add(xmlFolderPanel);
 
 
-        JBPanel paneMainDown = new JBPanel(new GridLayout(5, 5, 5, 5));
-        paneMainDown.setBorder(new EmptyBorder(2, 80, 100, 40));
+//        JBPanel paneMainDown = new JBPanel(new GridLayout(5, 5, 5, 5));
+//        paneMainDown.setBorder(new EmptyBorder(2, 80, 100, 40));
 
 
-        paneMain.add(paneMainTop);
-        paneMain.add(paneMainDown);
+        panelMain.add(panelMainTop);
+//        panelMain.add(paneMainDown);
 
 
         JPanel paneBottom = new JPanel();//确认和取消按钮
@@ -361,9 +334,9 @@ public class MainUI extends JFrame {
                 }
                 Config selectedConfig = finalHistoryConfigList.get(configName);
                 tableNameField.setText(selectedConfig.getTableName());
-                modelPostfixField.setText(selectedConfig.getModelPostfix());
-                daoPostfixField.setText(selectedConfig.getDaoPostfix());
-                mapperPostfixField.setText(selectedConfig.getMapperPostfix());
+                modelSuffixField.setText(selectedConfig.getModelSuffix());
+                daoSuffixField.setText(selectedConfig.getDaoSuffix());
+                mapperSuffixField.setText(selectedConfig.getMapperSuffix());
                 modelPackageField.setText(selectedConfig.getModelPackage());
                 daoPackageField.setText(selectedConfig.getDaoPackage());
                 xmlPackageField.setText(selectedConfig.getXmlPackage());
@@ -389,11 +362,11 @@ public class MainUI extends JFrame {
         panelLeft.add(btnPanel);
 
 
-        contentPane.add(paneMain, BorderLayout.CENTER);
-        contentPane.add(paneBottom, BorderLayout.SOUTH);
-        contentPane.add(panelLeft, BorderLayout.WEST);
+        contentPanel.add(panelMain, BorderLayout.CENTER);
+        contentPanel.add(paneBottom, BorderLayout.SOUTH);
+        contentPanel.add(panelLeft, BorderLayout.WEST);
 
-        setContentPane(contentPane);
+        setContentPane(contentPanel);
 
         setProjectBtn.addActionListener(new ActionListener() {
             @Override
@@ -427,7 +400,7 @@ public class MainUI extends JFrame {
             }
         });
 
-        contentPane.registerKeyboardAction(new ActionListener() {
+        contentPanel.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
@@ -466,9 +439,9 @@ public class MainUI extends JFrame {
             generatorConfig.setDaoMvnPath(daoMvnField.getText());
             generatorConfig.setXmlMvnPath(xmlMvnField.getText());
 
-            generatorConfig.setModelPostfix(modelPostfixField.getText());
-            generatorConfig.setDaoPostfix(daoPostfixField.getText());
-            generatorConfig.setMapperPostfix(mapperPostfixField.getText());
+            generatorConfig.setModelSuffix(modelSuffixField.getText());
+            generatorConfig.setDaoSuffix(daoSuffixField.getText());
+            generatorConfig.setMapperSuffix(mapperSuffixField.getText());
 
 
             dispose();

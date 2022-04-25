@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.mininglamp.km.nebula-generator</id>
     <name>Nebula Generator</name>
-    <vendor email="daiyi@mininglamp.com">daiyi</vendor>
+    <vendor email="1018905951@qq.com">daiyi</vendor>
 
     <description><![CDATA[
 
@@ -11,7 +11,7 @@
       <h3>How to use：</h3>
       <ul>
             <li>File->Settings->Tools->NEBULA GENERATOR->nebula url</li>
-            <li>Tools-NEBULA GENERATOR->table name</li>
+            <li>Tools-Nebula Generator->table name</li>
       </ul>
 
       <h3>中文：</h3>
@@ -50,7 +50,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
                 serviceImplementation="com.mininglamp.km.nebula.generator.setting.PersistentConfig"/>
-        <projectConfigurable groupId="tools" displayName="NEBULA GENERATOR" id="gene.id"
+        <projectConfigurable groupId="tools" displayName="Nebula Generator" id="gene.id"
                              instance="com.mininglamp.km.nebula.generator.setting.SettingConfigurable"/>
     </extensions>
 
@@ -59,12 +59,11 @@
         <action id="org.intellij.sdk.action.PopupDialogAction"
                 icon="com.mininglamp.km.nebula.generator.icons.SdkIcons.Sdk_default_icon"
                 class="com.mininglamp.km.nebula.generator.action.PopupGenerateAction"
-                text="Action Basics Plugin: Pop Dialog Action" description="NEBULA GENERATOR ACTION">
+                description="Nebula generator action">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <override-text place="MainMenu" text="NEBULA GENERATOR"/>
+            <override-text place="MainMenu" text="Nebula Generator"/>
             <keyboard-shortcut first-keystroke="ctrl meta alt N" keymap="$default"/>
         </action>
-
     </actions>
 
 
