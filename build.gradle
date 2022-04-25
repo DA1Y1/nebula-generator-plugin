@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version "0.7.2"
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+
+group 'com.mininglamp.km.nebula.generator'
+version '1.0.2'
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
+    implementation("com.mininglamp.km:mybatis-nebula-generator:1.1.1-SNAPSHOT") {
+        exclude(module: 'slf4j-api')
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+//    version '2021.2.1'
+    type 'IU'
+    localPath 'C:\\Program Files\\JetBrains\\IntelliJ IDEA 2021.1.1'
+    plugins = ['com.intellij.java'] // ,'Spring', 'SpringBoot' , 'lombok-plugin' , 'DatabaseTools'
+    sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
+    updateSinceUntilBuild = false
+}
+
+test {
+    testLogging {
+        // Show that tests are run in the command-line output
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+
+publishPlugin {
+    channels = 'Stable'
+    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+}

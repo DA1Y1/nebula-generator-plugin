@@ -1,0 +1,71 @@
+<idea-plugin>
+    <id>com.mininglamp.km.nebula-generator</id>
+    <name>Nebula Generator</name>
+    <vendor email="daiyi@mininglamp.com">daiyi</vendor>
+
+    <description><![CDATA[
+
+    <tag> code generate,code tools,mybatis generate </tag>
+      <h4>Nebula generator plugin.A idea plugin for mybatis code generate.</h4>
+
+      <h3>How to use：</h3>
+      <ul>
+            <li>File->Settings->Tools->NEBULA GENERATOR->nebula url</li>
+            <li>Tools-NEBULA GENERATOR->table name</li>
+      </ul>
+
+      <h3>中文：</h3>
+      <ul>
+            <li>支持根据schema生成对应的mybatis代码。</li>
+            <li>支持历史数据库连接保存。</li>
+            <li>支持历史生成配置保存。</li>
+      </ul>
+
+      <h3>English:</h3>
+      <ul>
+            <li>Support to generate corresponding mybatis code according to the schema.</li>
+            <li>Support historical database connection preservation.</li>
+            <li>Support history generation configuration saving.</li>
+      </ul>
+    ]]></description>
+
+
+    <change-notes><![CDATA[
+      <p>1.0.1</p>
+      <ul>
+        <li>1.Support code generation</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="201"/>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="com.mininglamp.km.nebula.generator.setting.PersistentConfig"/>
+        <projectConfigurable groupId="tools" displayName="NEBULA GENERATOR" id="gene.id"
+                             instance="com.mininglamp.km.nebula.generator.setting.SettingConfigurable"/>
+    </extensions>
+
+
+    <actions>
+        <action id="org.intellij.sdk.action.PopupDialogAction"
+                icon="com.mininglamp.km.nebula.generator.icons.SdkIcons.Sdk_default_icon"
+                class="com.mininglamp.km.nebula.generator.action.PopupGenerateAction"
+                text="Action Basics Plugin: Pop Dialog Action" description="NEBULA GENERATOR ACTION">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <override-text place="MainMenu" text="NEBULA GENERATOR"/>
+            <keyboard-shortcut first-keystroke="ctrl meta alt N" keymap="$default"/>
+        </action>
+
+    </actions>
+
+
+</idea-plugin>

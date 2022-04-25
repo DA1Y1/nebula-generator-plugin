@@ -1,0 +1,7 @@
+/idea-sandbox/
+/.idea/
+/build
+/.gradle
+/gradle
+gradle
+gradlew.bat
