@@ -22,6 +22,8 @@ public class Constants {
     public static final String JAVA_FILE_PACKAGE = "Java File Package:";
     public static final String XML_PACKAGE = "Xml Package:";
 
+    public static final String JDBC_JAR_PATH = "JDBC Jar Path:";
+
     public static final String TABLE_NAME = "Table Name:";
 
 

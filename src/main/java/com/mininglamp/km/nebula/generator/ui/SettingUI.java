@@ -2,6 +2,7 @@ package com.mininglamp.km.nebula.generator.ui;
 
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -20,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -57,6 +57,9 @@ public class SettingUI extends JDialog {
     private JTextField daoMvnField = new JBTextField(15);
     private JTextField xmlMvnField = new JBTextField(15);
 
+    private TextFieldWithBrowseButton jdbcPathBtn = new TextFieldWithBrowseButton();
+    FileChooserDescriptor jdbcChooser = new FileChooserDescriptor(false, false, true, true, false, false);
+
     private PersistentConfig config;
 
     public SettingUI() {
@@ -78,10 +81,12 @@ public class SettingUI extends JDialog {
         JPanel panelMainTop1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panelMainTop2 = new JPanel(new GridLayout(4, 1, 3, 3));
         JPanel panelMainTop3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panelMainTop4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelMainCenter.add(panelMainTopAll);
         panelMainCenter.add(panelMainTop1);
         panelMainCenter.add(panelMainTop2);
         panelMainCenter.add(panelMainTop3);
+        panelMainCenter.add(panelMainTop4);
 
         JPanel panelUrl = new JPanel();
         panelUrl.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -119,7 +124,7 @@ public class SettingUI extends JDialog {
         modelPackagePanel.add(modelPackageField);
         JButton packageBtn1 = new JButton("...");
         packageBtn1.addActionListener(actionEvent -> {
-            final PackageChooserDialog chooser = new PackageChooserDialog("chooser java file package", project);
+            final PackageChooserDialog chooser = new PackageChooserDialog("Chooser Java File Package", project);
             chooser.selectPackage(modelPackageField.getText());
             chooser.show();
             final PsiPackage psiPackage = chooser.getSelectedPackage();
@@ -212,16 +217,22 @@ public class SettingUI extends JDialog {
         panelMainTop2.add(daoFolderPanel);
         panelMainTop2.add(xmlFolderPanel);
 
+        // jdbc
+        JPanel jdbcPanel = new JPanel();
+        jdbcPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        jdbcPanel.add(new JLabel(JDBC_JAR_PATH));
+        jdbcPathBtn.setTextFieldPreferredWidth(45);
+        jdbcPathBtn.addBrowseFolderListener("Choose JDBC Jar File", null, project, jdbcChooser);
+        jdbcPanel.add(jdbcPathBtn);
+        panelMainTop4.add(jdbcPanel);
+
 
         mainPanel.add(panelMainCenter);
 
-        setProjectBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modelFolderBtn.setText(projectFolderBtn.getText());
-                daoFolderBtn.setText(projectFolderBtn.getText());
-                xmlFolderBtn.setText(projectFolderBtn.getText());
-            }
+        setProjectBtn.addActionListener(e -> {
+            modelFolderBtn.setText(projectFolderBtn.getText());
+            daoFolderBtn.setText(projectFolderBtn.getText());
+            xmlFolderBtn.setText(projectFolderBtn.getText());
         });
 
         if (Objects.nonNull(initConfigMap)) {
@@ -238,6 +249,9 @@ public class SettingUI extends JDialog {
             modelFolderBtn.setText(configValue.getModelTargetFolder());
             daoFolderBtn.setText(configValue.getDaoTargetFolder());
             xmlFolderBtn.setText(configValue.getXmlTargetFolder());
+
+            jdbcPathBtn.setText(configValue.getJdbcPath());
+
 
         } else {
             urlField.addFocusListener(new JTextFieldHintListener(urlField, NEBULA_URL));
@@ -290,6 +304,9 @@ public class SettingUI extends JDialog {
             if (!StringUtils.equals(this.xmlMvnField.getText(), SRC_MAIN_RESOURCES)) {
                 return true;
             }
+            if (StringUtils.isNotEmpty(this.jdbcPathBtn.getText())) {
+                return true;
+            }
             return false;
         }
         //保存过配置时 与保存配置比较
@@ -336,18 +353,35 @@ public class SettingUI extends JDialog {
         if (!checkSettingModify(this.xmlMvnField.getText(), config.getXmlMvnPath())) {
             return true;
         }
+        if (!checkSettingModify(this.jdbcPathBtn.getText(), config.getJdbcPath())) {
+            return true;
+        }
         return false;
     }
 
     public void apply() {
         if (StringUtils.equals(NEBULA_URL, urlField.getText()) || StringUtils.isEmpty(urlField.getText())) {
-            Messages.showMessageDialog("nebula url is null", "Error", null);
+            Messages.showMessageDialog("Nebula Url is null", "Error", null);
             return;
         }
-        if (!urlField.getText().startsWith("jdbc:nebula://")) {
-            Messages.showMessageDialog("Connect Example" + DbType.NEBULA.getConnectionUrlPattern(), "Error", null);
+        if (StringUtils.isEmpty(jdbcPathBtn.getText())) {
+            Messages.showMessageDialog("JDBC Jar Path is null", "Error", null);
             return;
         }
+        // 校验jar文件
+        if (!jdbcPathBtn.getText().endsWith(".jar")) {
+            Messages.showMessageDialog("Choose Jar File", "Error", null);
+            return;
+        }
+        if (!urlField.getText().startsWith("jdbc:")) {
+            if (jdbcPathBtn.getText().contains("1.1")) {
+                Messages.showMessageDialog("Connect Example " + DbType.NEBULA_11.getConnectionUrlPattern(), "Error", null);
+            }else{
+                Messages.showMessageDialog("Connect Example " + DbType.NEBULA.getConnectionUrlPattern(), "Error", null);
+            }
+            return;
+        }
+
         HashMap<String, Config> initConfig = new HashMap<>();
         Config config = new Config();
         config.setName("initConfig");
@@ -365,6 +399,7 @@ public class SettingUI extends JDialog {
         config.setModelMvnPath(modelMvnField.getText());
         config.setDaoMvnPath(daoMvnField.getText());
         config.setXmlMvnPath(xmlMvnField.getText());
+        config.setJdbcPath(jdbcPathBtn.getText());
 
         initConfig.put(config.getName(), config);
         this.config.setInitConfig(initConfig);
@@ -389,6 +424,7 @@ public class SettingUI extends JDialog {
             this.modelMvnField.setText(config.getModelMvnPath());
             this.daoMvnField.setText(config.getDaoMvnPath());
             this.xmlMvnField.setText(config.getXmlMvnPath());
+            this.jdbcPathBtn.setText(config.getJdbcPath());
         } else {
             this.urlField.setText("");
             this.urlField.addFocusListener(new JTextFieldHintListener(urlField, NEBULA_URL));
@@ -421,7 +457,7 @@ public class SettingUI extends JDialog {
      *
      * @param fieldContext  当前配置的内容
      * @param configContext 保存配置的内容
-     * @return
+     * @return boolean
      */
     public boolean checkSettingModify(String fieldContext, String configContext) {
         if (StringUtils.isEmpty(configContext)) {

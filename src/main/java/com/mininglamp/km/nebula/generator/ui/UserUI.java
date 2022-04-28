@@ -16,6 +16,8 @@ import com.mininglamp.km.nebula.generator.model.Config;
 import com.mininglamp.km.nebula.generator.model.DbType;
 import com.mininglamp.km.nebula.generator.model.User;
 import com.mininglamp.km.nebula.generator.setting.PersistentConfig;
+import com.mininglamp.km.nebula.generator.tools.JarLoader;
+import com.mininglamp.km.nebula.generator.tools.PluginUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -118,7 +120,12 @@ public class UserUI extends JFrame {
         try {
             Connection conn = null;
             try {
-                Class.forName(DbType.NEBULA.getDriverClass());
+//                JarLoader.INSTANCE.loadJar(generatorConfig.getJdbcPath());
+                PluginUtils.invokeInServiceLoader(generatorConfig.getJdbcPath());
+
+                Class.forName(DbType.NEBULA_11.getDriverClass());
+                JarLoader.INSTANCE.resetJdbcPrefix(generatorConfig.getJdbcPath());
+
 
                 conn = DriverManager.getConnection(address, usernameField.getText(), passwordField.getText());
 

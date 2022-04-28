@@ -282,12 +282,8 @@ public class MainUI extends JFrame {
         panelMainTop2.add(xmlFolderPanel);
 
 
-//        JBPanel paneMainDown = new JBPanel(new GridLayout(5, 5, 5, 5));
-//        paneMainDown.setBorder(new EmptyBorder(2, 80, 100, 40));
-
 
         panelMain.add(panelMainTop);
-//        panelMain.add(paneMainDown);
 
 
         JPanel paneBottom = new JPanel();//确认和取消按钮
@@ -325,38 +321,32 @@ public class MainUI extends JFrame {
 
         btnPanel.add(selectConfigBtn);
         btnPanel.add(deleteConfigBtn);
-        selectConfigBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String configName = (String) fruitList.getSelectedValue();
-                if (StringUtils.isEmpty(configName)) {
-                    return;
-                }
-                Config selectedConfig = finalHistoryConfigList.get(configName);
-                tableNameField.setText(selectedConfig.getTableName());
-                modelSuffixField.setText(selectedConfig.getModelSuffix());
-                daoSuffixField.setText(selectedConfig.getDaoSuffix());
-                mapperSuffixField.setText(selectedConfig.getMapperSuffix());
-                modelPackageField.setText(selectedConfig.getModelPackage());
-                daoPackageField.setText(selectedConfig.getDaoPackage());
-                xmlPackageField.setText(selectedConfig.getXmlPackage());
-                projectFolderBtn.setText(selectedConfig.getProjectFolder());
-                modelFolderBtn.setText(selectedConfig.getModelTargetFolder());
-                daoFolderBtn.setText(selectedConfig.getDaoTargetFolder());
-                xmlFolderBtn.setText(selectedConfig.getXmlTargetFolder());
-                modelMvnField.setText(selectedConfig.getModelMvnPath());
-                daoMvnField.setText(selectedConfig.getDaoMvnPath());
-                xmlMvnField.setText(selectedConfig.getXmlMvnPath());
+        selectConfigBtn.addActionListener(e -> {
+            String configName = (String) fruitList.getSelectedValue();
+            if (StringUtils.isEmpty(configName)) {
+                return;
             }
+            Config selectedConfig = finalHistoryConfigList.get(configName);
+            tableNameField.setText(selectedConfig.getTableName());
+            modelSuffixField.setText(selectedConfig.getModelSuffix());
+            daoSuffixField.setText(selectedConfig.getDaoSuffix());
+            mapperSuffixField.setText(selectedConfig.getMapperSuffix());
+            modelPackageField.setText(selectedConfig.getModelPackage());
+            daoPackageField.setText(selectedConfig.getDaoPackage());
+            xmlPackageField.setText(selectedConfig.getXmlPackage());
+            projectFolderBtn.setText(selectedConfig.getProjectFolder());
+            modelFolderBtn.setText(selectedConfig.getModelTargetFolder());
+            daoFolderBtn.setText(selectedConfig.getDaoTargetFolder());
+            xmlFolderBtn.setText(selectedConfig.getXmlTargetFolder());
+            modelMvnField.setText(selectedConfig.getModelMvnPath());
+            daoMvnField.setText(selectedConfig.getDaoMvnPath());
+            xmlMvnField.setText(selectedConfig.getXmlMvnPath());
         });
-        deleteConfigBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                finalHistoryConfigList.remove(fruitList.getSelectedValue());
-                defaultListModel.removeAllElements();
-                for (String historyConfigName : finalHistoryConfigList.keySet()) {
-                    defaultListModel.addElement(historyConfigName);
-                }
+        deleteConfigBtn.addActionListener(e -> {
+            finalHistoryConfigList.remove(fruitList.getSelectedValue());
+            defaultListModel.removeAllElements();
+            for (String historyConfigName : finalHistoryConfigList.keySet()) {
+                defaultListModel.addElement(historyConfigName);
             }
         });
         panelLeft.add(btnPanel);
@@ -368,13 +358,10 @@ public class MainUI extends JFrame {
 
         setContentPane(contentPanel);
 
-        setProjectBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modelFolderBtn.setText(projectFolderBtn.getText());
-                daoFolderBtn.setText(projectFolderBtn.getText());
-                xmlFolderBtn.setText(projectFolderBtn.getText());
-            }
+        setProjectBtn.addActionListener(e -> {
+            modelFolderBtn.setText(projectFolderBtn.getText());
+            daoFolderBtn.setText(projectFolderBtn.getText());
+            xmlFolderBtn.setText(projectFolderBtn.getText());
         });
 
         buttonOK.addActionListener(new ActionListener() {
@@ -388,11 +375,7 @@ public class MainUI extends JFrame {
         });
 
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -400,25 +383,21 @@ public class MainUI extends JFrame {
             }
         });
 
-        contentPanel.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPanel.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onOK() {
         try {
             PersistentConfig instance = PersistentConfig.getInstance();
             if (Objects.isNull(instance) || Objects.isNull(instance.getInitConfig())) {
-                Messages.showMessageDialog("nebula url has not set", "Error", null);
+                Messages.showMessageDialog("Nebula Url has not set", "Error", null);
                 return;
             }
             Config initConfig = instance.getInitConfig().get("initConfig");
             String url = initConfig.getUrl();
 
             if (StringUtils.isEmpty(tableNameField.getText())) {
-                Messages.showMessageDialog("table is null", "Error", null);
+                Messages.showMessageDialog("Table Name is null", "Error", null);
                 return;
             }
 
@@ -442,6 +421,8 @@ public class MainUI extends JFrame {
             generatorConfig.setModelSuffix(modelSuffixField.getText());
             generatorConfig.setDaoSuffix(daoSuffixField.getText());
             generatorConfig.setMapperSuffix(mapperSuffixField.getText());
+
+            generatorConfig.setJdbcPath(initConfig.getJdbcPath());
 
 
             dispose();

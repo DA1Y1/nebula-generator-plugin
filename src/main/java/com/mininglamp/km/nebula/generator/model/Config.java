@@ -88,4 +88,7 @@ public class Config {
     private String xmlPackage;
     private String xmlTargetFolder;
     private String xmlMvnPath;
+
+    private String jdbcPath;
+
 }

@@ -6,6 +6,8 @@ import com.mininglamp.km.nebula.generator.core.config.converts.TypeConverts;
 import com.mininglamp.km.nebula.generator.core.config.querys.DbQueryRegistry;
 import com.mininglamp.km.nebula.generator.core.toolkit.ExceptionUtils;
 import com.mininglamp.km.nebula.generator.core.toolkit.annotation.DbType;
+import com.mininglamp.km.nebula.generator.tools.JarLoader;
+import com.mininglamp.km.nebula.generator.tools.PluginUtils;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -54,6 +56,7 @@ public class DataSourceConfig {
      * 驱动名称
      */
     private String driverName;
+    private String driverPath;
     /**
      * 数据库连接用户名
      */
@@ -130,7 +133,12 @@ public class DataSourceConfig {
     public Connection getConn() {
         Connection conn;
         try {
+//            JarLoader.INSTANCE.loadJar(driverPath);
+            PluginUtils.invokeInServiceLoader(driverPath);
+
             Class.forName(driverName);
+            JarLoader.INSTANCE.resetJdbcPrefix(driverPath);
+
             conn = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);

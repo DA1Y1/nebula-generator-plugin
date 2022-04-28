@@ -15,6 +15,7 @@ import com.mininglamp.km.nebula.generator.core.toolkit.StringUtils;
 import com.mininglamp.km.nebula.generator.core.toolkit.annotation.IdType;
 import com.mininglamp.km.nebula.generator.core.toolkit.annotation.TableId;
 import com.mininglamp.km.nebula.generator.core.toolkit.annotation.Version;
+import com.mininglamp.km.nebula.generator.tools.PluginUtils;
 
 import java.io.File;
 import java.sql.Connection;
@@ -348,6 +349,10 @@ public class ConfigBuilder {
 
 
     private List<TableInfo> getGraphTableInfo(StrategyConfig config) {
+        PluginUtils.invokeInServiceLoader(dataSourceConfig.getDriverPath());
+
+//        JarLoader.INSTANCE.loadJar(dataSourceConfig.getDriverPath());
+
         Set<String> graphEdges = getGraphEdges();
 
         Set<String> graphTags = getGraphTags();
@@ -572,6 +577,9 @@ public class ConfigBuilder {
 
 
     public void closeConnection() {
+        PluginUtils.invokeInServiceLoader(dataSourceConfig.getDriverPath());
+
+//        JarLoader.INSTANCE.loadJar(dataSourceConfig.getDriverPath());
         if (connection != null) {
             try {
                 connection.close();

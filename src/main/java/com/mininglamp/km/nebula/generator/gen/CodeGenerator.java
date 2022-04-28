@@ -49,7 +49,8 @@ public class CodeGenerator {
         // 数据库连接配置
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(url);
-        dataSourceConfig.setDriverName(com.mininglamp.km.nebula.generator.model.DbType.NEBULA.getDriverClass());
+        dataSourceConfig.setDriverName(com.mininglamp.km.nebula.generator.model.DbType.NEBULA_11.getDriverClass());
+        dataSourceConfig.setDriverPath(generatorConfig.getJdbcPath());
         dataSourceConfig.setSpaceName(getNebulaDataSpaceName(url));
         dataSourceConfig.setUsername(username);
         CredentialAttributes attributes_get = new CredentialAttributes("nebula-mybatis-generator-" + url, username, this.getClass(), false);
