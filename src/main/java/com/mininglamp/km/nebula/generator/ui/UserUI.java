@@ -54,7 +54,7 @@ public class UserUI extends JFrame {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance();
-        setTitle("set nebula connection");
+        setTitle("Set Nebula Connection");
         setPreferredSize(new Dimension(400, 180));//设置大小
         setLocation(550, 350);
         pack();
@@ -120,7 +120,10 @@ public class UserUI extends JFrame {
             try {
                 Class.forName(DbType.NEBULA.getDriverClass());
 
+                ClassLoader contextClassLoaderTmp = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
                 conn = DriverManager.getConnection(address, usernameField.getText(), passwordField.getText());
+                Thread.currentThread().setContextClassLoader(contextClassLoaderTmp);
 
                 Map<String, User> users = persistentConfig.getUsers();
                 if (users == null) {
@@ -135,7 +138,7 @@ public class UserUI extends JFrame {
 
                 // VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
                 // baseDir.refresh(false, true);
-                Messages.showInfoMessage("connect success", "Set success");
+                Messages.showInfoMessage("Connect success", "Set success");
 
                 //连接成功直接生成文件
                 CodeGenerator genInstance = CodeGenerator.getInstance();
@@ -159,7 +162,7 @@ public class UserUI extends JFrame {
                     new MainUI(anActionEvent);
                 }
             } catch (Exception e) {
-                Messages.showInfoMessage("nebula connection fail,check config", "Set fail");
+                Messages.showInfoMessage("Nebula connection fail. Check Config", "Set fail");
                 logger.warn("nebula-generator nebula 连接失败 " + e.getMessage(), e);
                 // new MainUI(anActionEvent);
                 new UserUI(anActionEvent, address, generatorConfig);

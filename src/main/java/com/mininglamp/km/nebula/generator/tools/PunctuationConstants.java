@@ -51,5 +51,9 @@ public final class PunctuationConstants {
      * 闭圆括号
      */
     public static final String CLOSE_PARENTHESIS = ")";
+    /**
+     * 问号
+     */
+    public static final String QUESTION = "?";
 
 }

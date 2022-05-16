@@ -8,7 +8,7 @@ public enum DbType {
 
     MySQL("com.mysql.jdbc.Driver", "jdbc:mysql://%s:%s/%s?useUnicode=true&useSSL=false&characterEncoding=%s", "mysql-connector-java-5.1.38.jar"),
     MySQL_8("com.mysql.cj.jdbc.Driver", "jdbc:mysql://%s:%s/%s?serverTimezone=UTC&useUnicode=true&useSSL=false&characterEncoding=%s", "mysql-connector-java-8.0.11.jar"),
-    NEBULA("com.vesoft.nebula.jdbc.GraphDriver", "jdbc:graph://%s:%s/%s?characterEncoding=utf8", ""),
+    NEBULA("com.vesoft.nebula.jdbc.NebulaDriver", "jdbc:nebula://%s:%s", ""),
     ;
 
     private final String driverClass;

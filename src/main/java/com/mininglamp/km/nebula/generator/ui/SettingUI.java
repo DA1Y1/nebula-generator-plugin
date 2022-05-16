@@ -341,11 +341,11 @@ public class SettingUI extends JDialog {
 
     public void apply() {
         if (StringUtils.equals(NEBULA_URL, urlField.getText()) || StringUtils.isEmpty(urlField.getText())) {
-            Messages.showMessageDialog("nebula url is null", "Error", null);
+            Messages.showMessageDialog("Nebula url is null", "Error", null);
             return;
         }
-        if (!urlField.getText().startsWith("jdbc:graph://")) {
-            Messages.showMessageDialog("Connect Example" + DbType.NEBULA.getConnectionUrlPattern(), "Error", null);
+        if (!urlField.getText().startsWith("jdbc:nebula://")) {
+            Messages.showMessageDialog("Connect example: " + DbType.NEBULA.getConnectionUrlPattern(), "Error", null);
             return;
         }
         HashMap<String, Config> initConfig = new HashMap<>();

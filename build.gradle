@@ -9,17 +9,26 @@ apply plugin: 'java'
 
 
 group 'com.mininglamp.km.nebula.generator'
-version '1.0.3'
+version '1.0.4'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    testCompile group: 'junit', name: 'junit', version: '4.12'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
-    implementation("com.mininglamp.km:mybatis-nebula-generator:1.1.1-SNAPSHOT") {
-        exclude(module: 'slf4j-api')
-    }
+
+    implementation group: 'com.ibeetl', name: 'beetl', version: '3.5.1.RELEASE'
+    implementation group: 'io.github.tonyandfriday', name: 'nebula-jdbc', version: '1.2'
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -29,7 +38,7 @@ targetCompatibility = JavaVersion.VERSION_11
 intellij {
 //    version '2021.2.1'
     type 'IU'
-    localPath 'C:\\Program Files\\JetBrains\\IntelliJ IDEA 2021.1.1'
+    localPath '/Applications/IntelliJ IDEA.app'
     plugins = ['com.intellij.java'] // ,'Spring', 'SpringBoot' , 'lombok-plugin' , 'DatabaseTools'
     sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
     updateSinceUntilBuild = false

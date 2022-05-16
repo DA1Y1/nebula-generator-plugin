@@ -4,15 +4,15 @@ import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.ui.Messages;
-import com.mininglamp.km.nebula.generator.AutoGenerator;
-import com.mininglamp.km.nebula.generator.InjectionConfig;
-import com.mininglamp.km.nebula.generator.config.*;
-import com.mininglamp.km.nebula.generator.config.po.TableInfo;
-import com.mininglamp.km.nebula.generator.config.rules.NamingStrategy;
-import com.mininglamp.km.nebula.generator.engine.BeetlTemplateEngine;
+import com.mininglamp.km.nebula.generator.core.AutoGenerator;
+import com.mininglamp.km.nebula.generator.core.InjectionConfig;
+import com.mininglamp.km.nebula.generator.core.config.*;
+import com.mininglamp.km.nebula.generator.core.config.po.TableInfo;
+import com.mininglamp.km.nebula.generator.core.config.rules.NamingStrategy;
+import com.mininglamp.km.nebula.generator.core.engine.BeetlTemplateEngine;
+import com.mininglamp.km.nebula.generator.core.toolkit.StringPool;
+import com.mininglamp.km.nebula.generator.core.toolkit.annotation.DbType;
 import com.mininglamp.km.nebula.generator.model.Config;
-import com.mininglamp.km.nebula.generator.toolkit.StringPool;
-import com.mininglamp.km.nebula.generator.toolkit.annotation.DbType;
 import com.mininglamp.km.nebula.generator.tools.PunctuationConstants;
 
 import java.util.ArrayList;
@@ -171,7 +171,7 @@ public class CodeGenerator {
      * @return spacename
      */
     public String getNebulaDataSpaceName(String url) {
-        int last = url.indexOf("?");
+        int last = url.contains(PunctuationConstants.QUESTION) ? url.indexOf(PunctuationConstants.QUESTION) : url.length();
         int first = url.lastIndexOf("/", last);
         return url.substring(first + 1, last);
     }

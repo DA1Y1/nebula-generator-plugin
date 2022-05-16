@@ -8,7 +8,7 @@
 
 默认驼峰转换
 
-目前仅支持NEBULA 2.5.0
+目前仅支持NEBULA 2.5
 
 
 ## 1.2 不支持的情况
@@ -23,7 +23,7 @@
 
 1。command + ，打开设置面板，填写数据库url以及通用默认配置
 
-（url example) jdbc:graph://%s:%s/%s?characterEncoding=utf8
+（url example) jdbc:nebula://%s:%s/%s
 ![image](images/1.png)
 
 2。control + optaion + command + n 打开生成面板，填写表名

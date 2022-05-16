@@ -411,14 +411,14 @@ public class MainUI extends JFrame {
         try {
             PersistentConfig instance = PersistentConfig.getInstance();
             if (Objects.isNull(instance) || Objects.isNull(instance.getInitConfig())) {
-                Messages.showMessageDialog("nebula url has not set", "Error", null);
+                Messages.showMessageDialog("Nebula url has not set", "Error", null);
                 return;
             }
             Config initConfig = instance.getInitConfig().get("initConfig");
             String url = initConfig.getUrl();
 
             if (StringUtils.isEmpty(tableNameField.getText())) {
-                Messages.showMessageDialog("table is null", "Error", null);
+                Messages.showMessageDialog("Table is null", "Error", null);
                 return;
             }
 
