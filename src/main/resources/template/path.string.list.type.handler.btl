@@ -1,0 +1,79 @@
+package ${d.packagePath};
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author ${author}
+ */
+public class StringListTypeHandler implements TypeHandler<List<String>> {
+    private static final ObjectMapper OBJECT_MAPPER;
+
+    static {
+        OBJECT_MAPPER = new ObjectMapper();
+        //在反序列化时忽略在 json 中存在但 Java 对象不存在的属性
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //在序列化时日期格式默认为 yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        //在序列化时忽略值为 null 的属性
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+    @Override
+    public void setParameter(PreparedStatement ps, int i, List<String> parameter, JdbcType jdbcType) throws SQLException {
+
+    }
+
+    @Override
+    public List<String> getResult(ResultSet rs, String columnName) throws SQLException {
+        String object = rs.getString(columnName);
+        try {
+            List<String> relationShip = OBJECT_MAPPER.readValue(object, new TypeReference<List<String>>() {
+            });
+            return relationShip;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getResult(ResultSet rs, int columnIndex) throws SQLException {
+        String object = rs.getString(columnIndex);
+        try {
+            List<String> relationShip = OBJECT_MAPPER.readValue(object, new TypeReference<List<String>>() {
+            });
+            return relationShip;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getResult(CallableStatement cs, int columnIndex) throws SQLException {
+        String object = cs.getString(columnIndex);
+        try {
+            List<String> relationShip = OBJECT_MAPPER.readValue(object, new TypeReference<List<String>>() {
+            });
+            return relationShip;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+}

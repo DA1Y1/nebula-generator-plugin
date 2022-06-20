@@ -1,0 +1,22 @@
+package ${e.packagePath};
+
+import org.springframework.stereotype.Repository;
+import ${a.packagePath}.${a.fileName};
+
+import java.util.List;
+
+/**
+ * 查询路径接口
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Repository
+public interface ${e.fileName} {
+
+    /**
+     * 查询两点之间的路径
+     */
+    List<${a.fileName}> selectPath(${idType} src, ${idType} dst);
+
+}

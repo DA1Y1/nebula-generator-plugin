@@ -1,0 +1,105 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * <p>
+ * ${table.comment!} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Repository
+public interface ${table.mapperName} {
+
+    /**
+     * mapper 插入操作
+     * @param entity 插入实体
+     * @return 是否成功
+     */
+    int insert(${entity} entity);
+
+    /**
+     * mapper 更新操作
+     * @param entity 更新实体
+     * @return 是否成功
+     */
+    int update(${entity} entity);
+
+    /**
+     * 批量插入
+     * @param batch 实体列表
+     * @return i
+     */
+    int insertBatch(List<${entity}> batch);
+
+    <% if(table.isTag) { %>
+    /**
+     * 根据id查询实体
+     * @param id 实体id
+     * @return entity
+     */
+    ${entity} select(${table.idType} id);
+
+    /**
+     * 根据id查询实体
+     * @param batch 实体id列表
+     * @return entity list
+     */
+    List<${entity}> selectBatch(List<${table.idType}> batch);
+
+    /**
+     * 删除
+     * @param id 实体列表id
+     * @return i
+     */
+    int delete(${table.idType} id);
+
+    /**
+     * 批量删除
+     * @param batch 实体列表id
+     * @return i
+     */
+    int deleteBatch(List<${table.idType}> batch);
+
+    <% } %>
+
+    <% if(table.isEdge) { %>
+    /**
+     * 根据起始点查询边属性
+     * @param src 起始点id
+     * @param dst 终止点id
+     * @return entity
+     */
+    ${entity} select(${table.idType} src, ${table.idType} dst);
+
+    /**
+     * 根据起始点列表查询边属性
+     * @param batch 实体id列表
+     * @return entity list
+     */
+    List<${entity}> selectBatch(List<${entity}> batch);
+
+    /**
+     * 批量删除
+     * @param src 边起点
+     * @param dst 边终点
+     * @return i
+     */
+    int delete(${table.idType} src, ${table.idType} dst);
+
+    /**
+     * 批量删除
+     * @param batch 边列表
+     * @return i
+     */
+    int deleteBatch(List<${entity}> batch);
+    <% } %>
+
+
+}
